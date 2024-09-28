@@ -10,12 +10,6 @@ export const connection = new Sequelize(databaseConfig)
 const sequelizeService = {
 	init: async () => {
 		try {
-			await connection.authenticate()
-			console.log('Connection has been established successfully.')
-		} catch (error) {
-			console.error('Unable to connect to the database:', error)
-		}
-		try {
 			for (const file of modelFiles) {
 				const model = await import(`../models/${file}`)
 				model.default.init(connection)

@@ -29,7 +29,7 @@ server.use('/api/v1/absences', routes.absencesRoutes)
 // server.use(globalErrorHandler)
 
 // FOR VERCEL REQUIREMENTS
-server.listen(process.env.SERVER_PORT, async () => {
+server.listen(5001, async () => {
 	try {
 		await sequelizeModule.init()
 
