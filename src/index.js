@@ -10,7 +10,7 @@ import cors from 'cors'
 import express from 'express'
 import compression from 'compression'
 import routes from './routes'
-import globalErrorHandler from './middlewares/errorHandler.middleware'
+// import globalErrorHandler from './middlewares/errorHandler.middleware'
 
 const server = express()
 server.use(compression())
