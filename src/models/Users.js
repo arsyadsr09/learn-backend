@@ -54,7 +54,9 @@ class Users extends Model {
 		return this
 	}
 
-	static associate(models) {}
+	static associate(models) {
+		this.hasMany(models.Absences, { foreignKey: 'page_id' })
+	}
 
 	checkPassword(password) {
 		return bcrypt.compare(password, this.password)
