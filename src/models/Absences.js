@@ -1,38 +1,38 @@
-import { Sequelize, Model } from 'sequelize'
+import { DataTypes, Model } from 'sequelize'
 
 class Absences extends Model {
 	static init(sequelize) {
 		super.init(
 			{
 				absence_id: {
-					type: Sequelize.UUID,
+					type: DataTypes.UUID,
 					primaryKey: true,
-					defaultValue: Sequelize.UUIDV4,
+					defaultValue: DataTypes.UUIDV4,
 				},
 				user_id: {
-					type: Sequelize.UUID,
+					type: DataTypes.UUID,
 					allowNull: false,
 				},
 				latitude: {
-					type: Sequelize.STRING(128),
+					type: DataTypes.STRING(128),
 					allowNull: false,
 				},
 				longitude: {
-					type: Sequelize.STRING(128),
+					type: DataTypes.STRING(128),
 					allowNull: false,
 				},
 				is_active: {
-					type: Sequelize.BOOLEAN,
+					type: DataTypes.BOOLEAN,
 					allowNull: false,
 					defaultValue: true,
 				},
 				created_at: {
-					type: Sequelize.BIGINT,
+					type: DataTypes.BIGINT,
 					defaultValue: new Date().getTime(),
 					allowNull: false,
 				},
 				updated_at: {
-					type: Sequelize.BIGINT,
+					type: DataTypes.BIGINT,
 					defaultValue: null,
 				},
 			},

@@ -1,4 +1,4 @@
-import { Sequelize, Model } from 'sequelize'
+import { DataTypes, Model } from 'sequelize'
 import bcrypt from 'bcryptjs'
 
 class Users extends Model {
@@ -6,29 +6,29 @@ class Users extends Model {
 		super.init(
 			{
 				user_id: {
-					type: Sequelize.UUID,
+					type: DataTypes.UUID,
 					primaryKey: true,
-					defaultValue: Sequelize.UUIDV4,
+					defaultValue: DataTypes.UUIDV4,
 				},
 				name: {
-					type: Sequelize.STRING,
+					type: DataTypes.STRING,
 				},
 				email: {
-					type: Sequelize.STRING,
+					type: DataTypes.STRING,
 				},
 				password: {
-					type: Sequelize.STRING,
+					type: DataTypes.STRING,
 				},
 				phone_number: {
-					type: Sequelize.STRING,
+					type: DataTypes.STRING,
 				},
 				created_at: {
-					type: Sequelize.BIGINT,
+					type: DataTypes.BIGINT,
 					defaultValue: new Date().getTime(),
 					allowNull: false,
 				},
 				updated_at: {
-					type: Sequelize.BIGINT,
+					type: DataTypes.BIGINT,
 					defaultValue: null,
 				},
 			},
