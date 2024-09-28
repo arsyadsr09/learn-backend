@@ -9,6 +9,7 @@ export const connection = new Sequelize(databaseConfig)
 
 const sequelizeService = {
 	init: async () => {
+		logger().info(`[SEQUELIZE] ${connection.config.host} database service initializing`)
 		console.log(connection)
 		try {
 			for (const file of modelFiles) {
