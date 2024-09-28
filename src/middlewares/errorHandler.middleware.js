@@ -11,13 +11,9 @@ const currentEnv = process.env.NODE_ENV || 'development'
  */
 export default (err, _req, res, next) => {
 	if (res.headersSent) return next(err)
-	if (IsApiError(err)) return responseUtil.fail(res, err.statusCode, `errorHandler-1:${err.type}: ${err.message}`)
+	if (IsApiError(err)) return responseUtil.fail(res, err.statusCode, `${err.type}: ${err.message}`)
 	if (currentEnv === 'development') {
-		return responseUtil.fail(
-			res,
-			500,
-			`errorHandler-2${err.toString()}${err.type}: ${err.message}: ${res.toString()}:${_req.toString()}`
-		)
+		return responseUtil.fail(res, 500, `${err.type}: ${err.message}`)
 	}
 	return responseUtil.fail(res, 500, 'Something went wrong')
 }
