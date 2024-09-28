@@ -1,4 +1,4 @@
-import { DataTypes, Model } from 'sequelize'
+import Sequelize, { Model } from 'sequelize'
 import bcrypt from 'bcryptjs'
 
 class Users extends Model {
@@ -6,62 +6,59 @@ class Users extends Model {
 		super.init(
 			{
 				user_id: {
-					type: DataTypes.UUID,
+					type: Sequelize.UUID,
 					primaryKey: true,
-					defaultValue: DataTypes.UUIDV4,
+					defaultValue: Sequelize.UUIDV4,
 				},
 				name: {
-					type: DataTypes.STRING,
-					allowNull: false, // Assuming name is required, if not, remove this
+					type: Sequelize.STRING,
 				},
 				email: {
-					type: DataTypes.STRING,
-					allowNull: false, // Assuming email is required
-					unique: true, // Ensures no duplicate emails
-					validate: {
-						isEmail: true, // Sequelize built-in validation for email format
-					},
+					type: Sequelize.STRING,
 				},
 				password: {
-					type: DataTypes.STRING,
-					allowNull: false, // Password should always be required
+					type: Sequelize.STRING,
 				},
 				phone_number: {
-					type: DataTypes.STRING,
-					allowNull: true, // Optional field
-					validate: {
-						isNumeric: true, // Ensures the phone number contains only digits
-					},
+					type: Sequelize.STRING,
+				},
+				created_at: {
+					type: Sequelize.BIGINT,
+					defaultValue: new Date().getTime(),
+					allowNull: false,
+				},
+				updated_at: {
+					type: Sequelize.BIGINT,
+					defaultValue: null,
 				},
 			},
 			{
 				sequelize,
 				modelName: 'Users',
 				tableName: 'users',
-				underscored: true, // Converts camelCase to snake_case in the database
-				timestamps: true, // Automatically adds createdAt and updatedAt fields
-				hooks: {
-					beforeSave: async (user) => {
-						if (user.password) {
-							user.password = await bcrypt.hash(user.password, 8) // Hash password before saving
-						}
-					},
-				},
+				createdAt: false,
+				updatedAt: false,
+				underscored: true,
 				defaultScope: {
-					order: [['createdAt', 'DESC']],
+					order: [['created_at', 'DESC']],
 				},
 			}
 		)
+
+		this.addHook('beforeSave', async (user) => {
+			if (user.password) {
+				user.password = await bcrypt.hash(user.password, 8)
+			}
+		})
 
 		return this
 	}
 
 	static associate(models) {
-		this.hasMany(models.Absences, { foreignKey: 'user_id' })
+		this.hasMany(models.Absences, { foreignKey: 'page_id' })
 	}
 
-	// Method to check if passwords match
-	async checkPassword(password) {
+	checkPassword(password) {
 		return bcrypt.compare(password, this.password)
 	}
 }

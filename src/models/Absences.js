@@ -1,57 +1,58 @@
-import { DataTypes, Model } from 'sequelize'
+import Sequelize, { Model } from 'sequelize'
 
 class Absences extends Model {
 	static init(sequelize) {
-		// Define the model schema using Sequelize's modern API
-		return super.init(
+		super.init(
 			{
 				absence_id: {
-					type: DataTypes.UUID,
+					type: Sequelize.UUID,
 					primaryKey: true,
-					defaultValue: DataTypes.UUIDV4,
+					defaultValue: Sequelize.UUIDV4,
 				},
 				user_id: {
-					type: DataTypes.UUID,
+					type: Sequelize.UUID,
 					allowNull: false,
 				},
 				latitude: {
-					type: DataTypes.STRING(128),
+					type: Sequelize.STRING(128),
 					allowNull: false,
 				},
 				longitude: {
-					type: DataTypes.STRING(128),
+					type: Sequelize.STRING(128),
 					allowNull: false,
 				},
 				is_active: {
-					type: DataTypes.BOOLEAN,
+					type: Sequelize.BOOLEAN,
 					allowNull: false,
 					defaultValue: true,
 				},
-				// Sequelize will handle these timestamps automatically
-				createdAt: {
-					type: DataTypes.DATE,
+				created_at: {
+					type: Sequelize.BIGINT,
+					defaultValue: new Date().getTime(),
 					allowNull: false,
-					defaultValue: DataTypes.NOW, // Automatically sets current timestamp
 				},
-				updatedAt: {
-					type: DataTypes.DATE,
+				updated_at: {
+					type: Sequelize.BIGINT,
+					defaultValue: null,
 				},
 			},
 			{
 				sequelize,
 				modelName: 'Absences',
 				tableName: 'absences',
-				underscored: true, // This enables snake_case for column names
-				timestamps: true, // Sequelize will now automatically manage createdAt and updatedAt
+				createdAt: false,
+				updatedAt: false,
+				underscored: true,
 				defaultScope: {
-					order: [['createdAt', 'DESC']], // You can use 'createdAt' directly with Sequelize's built-in timestamps
+					order: [['created_at', 'DESC']],
 				},
 			}
 		)
+
+		return this
 	}
 
 	static associate(models) {
-		// Define the relationships here
 		this.belongsTo(models.Users, { foreignKey: 'user_id', as: 'user' })
 	}
 }

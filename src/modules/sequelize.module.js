@@ -9,6 +9,7 @@ export const connection = new Sequelize(databaseConfig)
 
 const sequelizeService = {
 	init: async () => {
+		console.log(connection)
 		try {
 			for (const file of modelFiles) {
 				const model = await import(`../models/${file}`)
