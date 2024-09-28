@@ -1,7 +1,7 @@
-import { Request, Response, NextFunction } from 'express';
-import { IsApiError, ApiError } from '../utils/ApiError';
-import responseUtil from '../utils/Response';
-const currentEnv = process.env.NODE_ENV || 'development';
+import { Request, Response, NextFunction } from 'express'
+import { IsApiError, ApiError } from '../utils/ApiError'
+import responseUtil from '../utils/Response'
+const currentEnv = process.env.NODE_ENV || 'development'
 /**
  * Global error handler for all routes
  * @param {ApiError} err
@@ -10,10 +10,10 @@ const currentEnv = process.env.NODE_ENV || 'development';
  * @param {NextFunction} next
  */
 export default (err, _req, res, next) => {
-  if (res.headersSent) return next(err);
-  if (IsApiError(err)) return responseUtil.fail(res, err.statusCode, `${err.type}: ${err.message}`);
-  if (currentEnv === 'development') {
-  return responseUtil.fail(res, 500, `${err.type}: ${err.message}`);
-  }
-  return responseUtil.fail(res, 500, 'Something went wrong');
-};
+	if (res.headersSent) return next(err)
+	if (IsApiError(err)) return responseUtil.fail(res, err.statusCode, `errorHandler-1:${err.type}: ${err.message}`)
+	if (currentEnv === 'development') {
+		return responseUtil.fail(res, 500, `errorHandler-2${err.type}: ${err.message}`)
+	}
+	return responseUtil.fail(res, 500, 'Something went wrong')
+}
