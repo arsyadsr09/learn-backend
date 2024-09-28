@@ -2,7 +2,8 @@ import { DataTypes, Model } from 'sequelize'
 
 class Absences extends Model {
 	static init(sequelize) {
-		super.init(
+		// Define the model schema using Sequelize's modern API
+		return super.init(
 			{
 				absence_id: {
 					type: DataTypes.UUID,
@@ -26,33 +27,31 @@ class Absences extends Model {
 					allowNull: false,
 					defaultValue: true,
 				},
-				created_at: {
-					type: DataTypes.BIGINT,
-					defaultValue: new Date().getTime(),
+				// Sequelize will handle these timestamps automatically
+				createdAt: {
+					type: DataTypes.DATE,
 					allowNull: false,
+					defaultValue: DataTypes.NOW, // Automatically sets current timestamp
 				},
-				updated_at: {
-					type: DataTypes.BIGINT,
-					defaultValue: null,
+				updatedAt: {
+					type: DataTypes.DATE,
 				},
 			},
 			{
 				sequelize,
 				modelName: 'Absences',
 				tableName: 'absences',
-				createdAt: false,
-				updatedAt: false,
-				underscored: true,
+				underscored: true, // This enables snake_case for column names
+				timestamps: true, // Sequelize will now automatically manage createdAt and updatedAt
 				defaultScope: {
-					order: [['created_at', 'DESC']],
+					order: [['createdAt', 'DESC']], // You can use 'createdAt' directly with Sequelize's built-in timestamps
 				},
 			}
 		)
-
-		return this
 	}
 
 	static associate(models) {
+		// Define the relationships here
 		this.belongsTo(models.Users, { foreignKey: 'user_id', as: 'user' })
 	}
 }

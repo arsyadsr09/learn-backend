@@ -12,53 +12,56 @@ class Users extends Model {
 				},
 				name: {
 					type: DataTypes.STRING,
+					allowNull: false, // Assuming name is required, if not, remove this
 				},
 				email: {
 					type: DataTypes.STRING,
+					allowNull: false, // Assuming email is required
+					unique: true, // Ensures no duplicate emails
+					validate: {
+						isEmail: true, // Sequelize built-in validation for email format
+					},
 				},
 				password: {
 					type: DataTypes.STRING,
+					allowNull: false, // Password should always be required
 				},
 				phone_number: {
 					type: DataTypes.STRING,
-				},
-				created_at: {
-					type: DataTypes.BIGINT,
-					defaultValue: new Date().getTime(),
-					allowNull: false,
-				},
-				updated_at: {
-					type: DataTypes.BIGINT,
-					defaultValue: null,
+					allowNull: true, // Optional field
+					validate: {
+						isNumeric: true, // Ensures the phone number contains only digits
+					},
 				},
 			},
 			{
 				sequelize,
 				modelName: 'Users',
 				tableName: 'users',
-				createdAt: false,
-				updatedAt: false,
-				underscored: true,
+				underscored: true, // Converts camelCase to snake_case in the database
+				timestamps: true, // Automatically adds createdAt and updatedAt fields
+				hooks: {
+					beforeSave: async (user) => {
+						if (user.password) {
+							user.password = await bcrypt.hash(user.password, 8) // Hash password before saving
+						}
+					},
+				},
 				defaultScope: {
-					order: [['created_at', 'DESC']],
+					order: [['createdAt', 'DESC']],
 				},
 			}
 		)
-
-		this.addHook('beforeSave', async (user) => {
-			if (user.password) {
-				user.password = await bcrypt.hash(user.password, 8)
-			}
-		})
 
 		return this
 	}
 
 	static associate(models) {
-		this.hasMany(models.Absences, { foreignKey: 'page_id' })
+		this.hasMany(models.Absences, { foreignKey: 'user_id' })
 	}
 
-	checkPassword(password) {
+	// Method to check if passwords match
+	async checkPassword(password) {
 		return bcrypt.compare(password, this.password)
 	}
 }
