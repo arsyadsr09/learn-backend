@@ -26,7 +26,7 @@ server.get('/', (req, res) => res.send('Hello World'))
 server.use('/api/v1/auth', routes.authRoutes)
 server.use('/api/v1/absences', routes.absencesRoutes)
 
-server.use(globalErrorHandler)
+// server.use(globalErrorHandler)
 
 // FOR VERCEL REQUIREMENTS
 server.listen(process.env.SERVER_PORT, async () => {
