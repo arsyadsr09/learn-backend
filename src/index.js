@@ -10,7 +10,7 @@ import cors from 'cors'
 import express from 'express'
 import compression from 'compression'
 import routes from './routes'
-// import globalErrorHandler from './middlewares/errorHandler.middleware'
+import globalErrorHandler from './middlewares/errorHandler.middleware'
 
 const server = express()
 server.use(compression())
@@ -26,19 +26,24 @@ server.get('/', (req, res) => res.send('Hello World'))
 server.use('/api/v1/auth', routes.authRoutes)
 server.use('/api/v1/absences', routes.absencesRoutes)
 
-// server.use(globalErrorHandler)
+server.use(globalErrorHandler)
 
-// FOR VERCEL REQUIREMENTS
-server.listen(5001, async () => {
+const initSequelize = async () => {
 	try {
 		await sequelizeModule.init()
 
-		logger().info('🚀 Server initialized successfully')
+		console.log('🚀 Server initialized successfully')
 	} catch (error) {
-		logger().error(error)
+		console.error(error)
 		process.exit(1)
 	}
-})
+}
+
+initSequelize()
+
+// FOR VERCEL REQUIREMENTS
+server.listen(process.env.SERVER_PORT, () => console.log('[EXPRESS] Express initialized'))
+
 logger().info('[EXPRESS] Express initialized')
 
 module.exports = server
